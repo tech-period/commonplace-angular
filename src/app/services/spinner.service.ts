@@ -10,6 +10,7 @@ import { SpinnerComponent } from '../components/spinner/spinner.component';
 export class SpinnerService {
 
   private overlayRef: OverlayRef;
+  private stateList: Set<string> = new Set<string>();
 
   constructor(
     private overlay: Overlay,
@@ -26,11 +27,27 @@ export class SpinnerService {
     });
   }
 
-  show(): void {
-    this.overlayRef.attach(new ComponentPortal(SpinnerComponent));
+  show(): string {
+    const id = this.createNewState();
+    this.stateList.add(id);
+    this.overlayRef.attach(
+      new ComponentPortal(SpinnerComponent)
+    );
+    return id;
   }
 
-  hide(): void {
-    this.overlayRef.detach();
+  hide(id: string): void {
+    this.stateList.delete(id);
+    if(this.stateList.size < 1) {
+      this.overlayRef.detach();
+    }
+  }
+
+  private createNewState(): string {
+    let id: string;
+    do {
+      id = self.crypto.randomUUID();
+    } while (this.stateList.has(id));
+    return id;
   }
 }
