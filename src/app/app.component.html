@@ -1,2 +1,9 @@
 <app-navbar/>
-<router-outlet />
+<mat-sidenav-container>
+  <mat-sidenav mode="side" [opened]="isSidenavOpened">
+    <!-- mat-nav-listのコンポーネント -->
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <router-outlet />
+  </mat-sidenav-content>
+</mat-sidenav-container>

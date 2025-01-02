@@ -13,6 +13,6 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideAnimationsAsync(),
     OverlayModule,
-    provideStore()
-]
+    provideStore(),
+  ]
 };
