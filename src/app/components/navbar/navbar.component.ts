@@ -4,6 +4,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Subscription } from 'rxjs';
+import { distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-navbar',
@@ -28,6 +29,11 @@ export class NavbarComponent {
         Breakpoints.XSmall,
         Breakpoints.Small,
       ])
+      .pipe(
+        distinctUntilChanged((prev, curr) =>
+          prev.matches === curr.matches
+        ),
+      )
       .subscribe((state) => {
         console.log('state', state);
         this.isSmall = state.matches;
