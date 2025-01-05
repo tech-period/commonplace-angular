@@ -1,0 +1,7 @@
+<mat-nav-list>
+  @for (route of sampleList; track route) {
+    <mat-list-item>
+      <a matListItemTitle href="{{ route.path }}">{{ route.path }}</a>
+    </mat-list-item>
+  }
+</mat-nav-list>
