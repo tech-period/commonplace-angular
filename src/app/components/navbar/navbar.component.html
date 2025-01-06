@@ -1,5 +1,5 @@
 <mat-toolbar>
-  @if(isSmall) {
+  @if(isSmall$ | async) {
     <button mat-icon-button>
       <mat-icon>menu</mat-icon>
     </button>
