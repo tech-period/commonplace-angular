@@ -1,6 +1,6 @@
 <mat-toolbar>
   @if(isSmall$ | async) {
-    <button mat-icon-button>
+    <button mat-icon-button (click)="onClickShowSidenavIcon()">
       <mat-icon>menu</mat-icon>
     </button>
   }

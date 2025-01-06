@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -19,6 +19,8 @@ import { ViewportService } from '../../services/viewport.service';
 })
 export class NavbarComponent {
 
+  @Output() toggleSidenav = new EventEmitter<void>();
+
   isSmall$: Observable<boolean>;
 
   constructor(
@@ -26,4 +28,9 @@ export class NavbarComponent {
   ) {
     this.isSmall$ = this.viewPortService.isSmall$;
   }
+
+  onClickShowSidenavIcon(): void {
+    this.toggleSidenav.emit();
+  }
+
 }

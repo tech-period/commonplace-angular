@@ -24,7 +24,7 @@ import { ViewportService } from './services/viewport.service';
 export class AppComponent {
 
   isShowSidenav$: Observable<boolean>;
-  isSidenavOpen$ = new BehaviorSubject<boolean>(true);
+  isSidenavOpen$ = new BehaviorSubject<boolean>(false);
 
   constructor(
     private viewPortService: ViewportService,
@@ -36,5 +36,9 @@ export class AppComponent {
       map(([isSmall, isSidenavOpen]) => !isSmall || isSidenavOpen),
     );
 
+  }
+
+  onToggleSidenav(): void {
+    this.isSidenavOpen$.next(!this.isSidenavOpen$.value);
   }
 }
