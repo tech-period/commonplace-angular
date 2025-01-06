@@ -1,16 +1,18 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Subscription } from 'rxjs';
-import { distinctUntilChanged } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { NavListComponent } from './components/nav-list/nav-list.component';
+import { ViewportService } from './services/viewport.service';
 
 @Component({
   selector: 'app-root',
   imports: [
+    CommonModule,
     RouterOutlet,
     MatSidenavModule,
     NavbarComponent,
@@ -21,28 +23,18 @@ import { NavListComponent } from './components/nav-list/nav-list.component';
 })
 export class AppComponent {
 
-  isSidenavOpened: boolean = false;
-  private breakpointStateSub$: Subscription;
-  constructor(
-    private breakpointObserver: BreakpointObserver,
-  ) {
-    this.breakpointStateSub$ = this.breakpointObserver
-      .observe([
-        Breakpoints.XSmall,
-        Breakpoints.Small,
-      ])
-      .pipe(
-        distinctUntilChanged((prev, curr) =>
-          prev.matches === curr.matches
-        ),
-      )
-      .subscribe((state) => {
-        console.log('state', state);
-        this.isSidenavOpened = state.matches;
-      });
-  }
+  isShowSidenav$: Observable<boolean>;
+  isSidenavOpen$ = new BehaviorSubject<boolean>(true);
 
-  ngOnDestroy() {
-    this.breakpointStateSub$.unsubscribe();
+  constructor(
+    private viewPortService: ViewportService,
+  ) {
+    this.isShowSidenav$ = combineLatest([
+      this.viewPortService.isSmall$,
+      this.isSidenavOpen$,
+    ]).pipe(
+      map(([isSmall, isSidenavOpen]) => !isSmall || isSidenavOpen),
+    );
+
   }
 }
