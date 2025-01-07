@@ -1,6 +1,6 @@
 <app-navbar (toggleSidenav)="onToggleSidenav()"/>
 <mat-sidenav-container>
-  <mat-sidenav mode="over" [opened]="isShowSidenav$ | async">
+  <mat-sidenav mode="side" [opened]="isShowSidenav$ | async">
     <app-nav-list/>
   </mat-sidenav>
   <mat-sidenav-content>
