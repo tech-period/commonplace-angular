@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { MatListModule } from '@angular/material/list';
 
 @Component({
@@ -11,10 +11,10 @@ import { MatListModule } from '@angular/material/list';
 })
 export class NavListComponent {
 
-  sampleList = [
+  sampleList = signal([
     { path: '', component: '' },
     { path: 'sample1', component: 'SampleA' },
     { path: 'sample2', component: 'SampleB' },
     { path: 'sample3', component: 'SampleC' },
-  ]
+  ]);
 }
