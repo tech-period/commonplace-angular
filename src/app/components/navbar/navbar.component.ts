@@ -5,6 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { Observable } from 'rxjs';
 import { ViewportService } from '../../services/viewport.service';
+import { AngularIconComponent } from "../angular-icon/angular-icon.component";
 
 @Component({
   selector: 'app-navbar',
@@ -13,6 +14,7 @@ import { ViewportService } from '../../services/viewport.service';
     MatButtonModule,
     MatIconModule,
     MatToolbarModule,
+    AngularIconComponent,
   ],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss'
