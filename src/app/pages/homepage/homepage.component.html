@@ -1,5 +1,14 @@
 <main class="main">
   <div class="content">
     <div class="divider" role="separator" aria-label="Divider"></div>
+    @for (cardTitle of cardTitles; track cardTitle) {
+      <mat-card appearance="outlined">
+        <mat-card-header>
+          <mat-card-title>{{ cardTitle }}</mat-card-title>
+        </mat-card-header>
+        <!-- <img mat-card-image src="" alt=""> -->
+        <mat-card-content>サンプルページの概要</mat-card-content>
+      </mat-card>
+    }
   </div>
 </main>
