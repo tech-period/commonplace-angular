@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -26,6 +27,7 @@ export class NavbarComponent {
   isSmall$: Observable<boolean>;
 
   constructor(
+    private router: Router,
     private viewPortService: ViewportService,
   ) {
     this.isSmall$ = this.viewPortService.isSmall$;
@@ -35,4 +37,7 @@ export class NavbarComponent {
     this.toggleSidenav.emit();
   }
 
+  navigateTo(route: string): void {
+    this.router.navigate([route]);
+  }
 }
