@@ -1,7 +1,7 @@
 <mat-nav-list>
   @for (route of this.sampleList(); track route) {
     <mat-list-item>
-      <a matListItemTitle href="{{ route.path }}">{{ route.path }}</a>
+      <a matListItemTitle (click)="navigateTo(route)">{{ route }}</a>
     </mat-list-item>
   }
 </mat-nav-list>
