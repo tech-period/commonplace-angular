@@ -1,7 +1,7 @@
 import { Component, Signal, signal } from '@angular/core';
-import { Router } from '@angular/router';
 import { MatListModule } from '@angular/material/list';
 import { routes } from '../../app.routes';
+import { RoutingService } from '../../services/routing.service';
 
 @Component({
   selector: 'app-nav-list',
@@ -16,7 +16,7 @@ export class NavListComponent {
   sampleList: Signal<string[]>;
 
   constructor(
-    private router: Router,
+    private router: RoutingService,
   ) {
     const routePaths = routes
       .map(r => r.path)
@@ -25,6 +25,6 @@ export class NavListComponent {
   }
 
   navigateTo(path: string): void {
-    this.router.navigate([path]);
+    this.router.navigateTo(path);
   }
 }
