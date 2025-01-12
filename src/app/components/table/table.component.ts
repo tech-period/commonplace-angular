@@ -27,6 +27,14 @@ export class TableComponent {
       { id: 1, sample1: 'A', sample2: 'B', sample3: 'C' },
       { id: 2, sample1: 'D', sample2: 'E', sample3: 'F' },
       { id: 3, sample1: 'G', sample2: 'H', sample3: 'I' },
+      { id: 4, sample1: 'G', sample2: 'H', sample3: 'I' },
+      { id: 5, sample1: 'G', sample2: 'H', sample3: 'I' },
+      { id: 6, sample1: 'G', sample2: 'H', sample3: 'I' },
+      { id: 7, sample1: 'G', sample2: 'H', sample3: 'I' },
+      { id: 8, sample1: 'G', sample2: 'H', sample3: 'I' },
+      { id: 9, sample1: 'G', sample2: 'H', sample3: 'I' },
+      { id: 10, sample1: 'G', sample2: 'H', sample3: 'I' },
+      { id: 11, sample1: 'G', sample2: 'H', sample3: 'I' },
     ];
   }
 }
