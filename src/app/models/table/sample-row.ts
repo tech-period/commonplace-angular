@@ -2,11 +2,13 @@ import { AbstractRow, ColumnName } from "./abstract-row";
 
 export class SampleRow extends AbstractRow {
 
-  @ColumnName('Sample 111')
+  @ColumnName('id')
+  override id: string;
+  @ColumnName('sample1')
   sample1: string;
-  @ColumnName('Sample 222')
+  @ColumnName('sample2')
   sample2: string;
-  @ColumnName('Sample 333')
+  @ColumnName('sample3')
   sample3: string;
 
   constructor(
@@ -19,6 +21,7 @@ export class SampleRow extends AbstractRow {
     deleteDateTime: Date | null = null,
   ) {
     super(id, createDateTime, updateDateTime, deleteDateTime);
+    this.id = id;
     this.sample1 = sample1;
     this.sample2 = sample2;
     this.sample3 = sample3;
