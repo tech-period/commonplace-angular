@@ -2,13 +2,13 @@ import { AbstractRow, ColumnName } from "./abstract-row";
 
 export class SampleRow extends AbstractRow {
 
-  @ColumnName('id')
+  @ColumnName('ID')
   override id: string;
-  @ColumnName('sample1')
+  @ColumnName('SAMPLE1')
   sample1: string;
-  @ColumnName('sample2')
+  @ColumnName('SAMPLE2')
   sample2: string;
-  @ColumnName('sample3')
+  @ColumnName('SAMPLE3')
   sample3: string;
 
   constructor(

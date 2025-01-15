@@ -22,7 +22,7 @@ export class TableComponent {
     'sample2',
     'sample3',
   ];
-  columnDefs: string[];
+  columnDefs: { key: string, value: string }[];
   dataSource = new MatTableDataSource<any>([]);
   rows: SampleRow[];
 
@@ -42,6 +42,18 @@ export class TableComponent {
     ];
 
     this.dataSource.data = rawData;
-    this.columnDefs = getColumnDefs(SampleRow);
+
+    this.rows = rawData.map((data) => {
+      return new SampleRow(
+        data.id.toString(),
+        data.sample1,
+        data.sample2,
+        data.sample3,
+        new Date(),
+      );
+    });
+    const columnDefsMap = getColumnDefs(SampleRow);
+    this.columnDefs = Array.from(columnDefsMap, ([key, value]) => ({ key, value }));
+    console.log(this.columnDefs);
   }
 }
