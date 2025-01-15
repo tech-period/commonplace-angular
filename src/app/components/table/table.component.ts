@@ -3,7 +3,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { SampleRow } from '../../models/table/sample-row';
-import { getColumnDefs } from '../../models/table/abstract-row';
+import { getColumnDefs } from '../../decorators/table';
 
 @Component({
   selector: 'app-table',
@@ -24,7 +24,6 @@ export class TableComponent {
   ];
   columnDefs: { key: string, value: string }[];
   dataSource = new MatTableDataSource<any>([]);
-  rows: SampleRow[];
 
   constructor() {
     const rawData = [
@@ -41,9 +40,7 @@ export class TableComponent {
       { id: 11, sample1: 'G', sample2: 'H', sample3: 'I' },
     ];
 
-    this.dataSource.data = rawData;
-
-    this.rows = rawData.map((data) => {
+    this.dataSource.data = rawData.map((data) => {
       return new SampleRow(
         data.id.toString(),
         data.sample1,
@@ -52,8 +49,10 @@ export class TableComponent {
         new Date(),
       );
     });
-    const columnDefsMap = getColumnDefs(SampleRow);
-    this.columnDefs = Array.from(columnDefsMap, ([key, value]) => ({ key, value }));
-    console.log(this.columnDefs);
+    this.columnDefs = Array.from(
+      getColumnDefs(SampleRow),
+      ([key, value]) => ({ key, value })
+    );
+    this.columns = this.columnDefs.map(d => d.key);
   }
 }

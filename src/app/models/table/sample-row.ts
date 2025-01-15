@@ -1,4 +1,5 @@
-import { AbstractRow, ColumnName } from "./abstract-row";
+import { ColumnName } from "../../decorators/table";
+import { AbstractRow } from "./abstract-row";
 
 export class SampleRow extends AbstractRow {
 
