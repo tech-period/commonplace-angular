@@ -1,7 +1,7 @@
 <div class="container">
   <div class="header-contents"></div>
   <div class="table-contents">
-    <table mat-table matSort [dataSource]="dataSource">
+    <table mat-table matSort [dataSource]="dataSource" (matSortChange)="onSortChange($event)">
       @for (def of columnDefs; track def) {
         <ng-container [matColumnDef]="def.key">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ def.value }}</th>
@@ -24,7 +24,6 @@
     <mat-paginator
       [length]="rowLength()"
       [pageSizeOptions]="pageSizeOptions()"
-      aria-label="Select page of users"
       (page)="onPageChange($event)"
     />
   </div>
