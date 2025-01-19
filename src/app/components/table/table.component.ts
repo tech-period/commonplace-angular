@@ -1,9 +1,10 @@
-import { Component, signal } from '@angular/core';
+import { Component, Input, signal, SimpleChanges } from '@angular/core';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatSortModule, Sort, SortDirection } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { SampleRow } from '../../models/table/sample-row';
 import { getColumnDefs } from '../../decorators/table';
+import { TableDataManager } from '../../models/table/table-data-manager';
 
 @Component({
   selector: 'app-table',
@@ -16,6 +17,10 @@ import { getColumnDefs } from '../../decorators/table';
   styleUrl: './table.component.scss'
 })
 export class TableComponent {
+
+  @Input()
+  tableDataManager?: TableDataManager<any>;
+
   rowLength = signal(0);
   pageSizeOptions = signal([5, 10, 25, 100]);
   pageSize = signal(this.pageSizeOptions()[0]);
@@ -25,7 +30,7 @@ export class TableComponent {
     'sample2',
     'sample3',
   ];
-  columnDefs: { key: string, value: string }[];
+  columnDefs: { key: string, value: string }[] = [];
   dataSource = new MatTableDataSource<any>([]);
   private rawData:any = [
     { id: 1, sample1: 'A', sample2: 'B', sample3: 'C' },
@@ -42,21 +47,30 @@ export class TableComponent {
   ];
 
   constructor() {
-    this.dataSource.data = this.rawData.map((data:any) => {
-      return new SampleRow(
-        data.id.toString(),
-        data.sample1,
-        data.sample2,
-        data.sample3,
-        new Date(),
-      );
-    }).slice(0, this.pageSize());
+    // this.dataSource.data = this.rawData.map((data:any) => {
+    //   return new SampleRow(
+    //     data.id.toString(),
+    //     data.sample1,
+    //     data.sample2,
+    //     data.sample3,
+    //     new Date(),
+    //   );
+    // }).slice(0, this.pageSize());
     this.rowLength.update(() => this.rawData.length);
-    this.columnDefs = Array.from(
-      getColumnDefs(SampleRow),
-      ([key, value]) => ({ key, value })
-    );
-    this.columns = this.columnDefs.map(d => d.key);
+    // this.columnDefs = Array.from(
+    //   getColumnDefs(SampleRow),
+    //   ([key, value]) => ({ key, value })
+    // );
+  }
+  
+  ngOnChanges(changes: SimpleChanges): void {
+    if(changes['tableDataManager']) {
+      const tableDataManager = changes['tableDataManager'];
+      this.dataSource.data = tableDataManager.currentValue.rows;
+      this.columnDefs = tableDataManager.currentValue.columnDefs;
+      this.columns = this.columnDefs.map(d => d.key);
+      console.log('on change: ', changes);
+    }
   }
 
   onSortChange(event: Sort): void {
