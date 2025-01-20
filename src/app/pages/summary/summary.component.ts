@@ -13,7 +13,7 @@ import { SampleRow } from '../../models/table/sample-row';
 })
 export class SummaryComponent {
 
-  tableDataManager: TableDataManager<SampleRow>;
+  rows: SampleRow[] = [];
 
   private rawData:any = [
     { id: 1, sample1: 'A', sample2: 'B', sample3: 'C' },
@@ -30,7 +30,7 @@ export class SummaryComponent {
   ];
 
   constructor() {
-    const rowData: SampleRow[] = this.rawData.map((data:any) => {
+    this.rows = this.rawData.map((data:any) => {
       return new SampleRow(
         data.id.toString(),
         data.sample1,
@@ -39,6 +39,5 @@ export class SummaryComponent {
         new Date(),
       );
     });
-    this.tableDataManager = new TableDataManager(SampleRow, rowData);
   }
 }

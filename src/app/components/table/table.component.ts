@@ -5,6 +5,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { SampleRow } from '../../models/table/sample-row';
 import { getColumnDefs } from '../../decorators/table';
 import { TableDataManager } from '../../models/table/table-data-manager';
+import { AbstractRow } from '../../models/table/abstract-row';
 
 @Component({
   selector: 'app-table',
@@ -16,10 +17,9 @@ import { TableDataManager } from '../../models/table/table-data-manager';
   templateUrl: './table.component.html',
   styleUrl: './table.component.scss'
 })
-export class TableComponent {
+export class TableComponent<T extends AbstractRow> {
 
-  @Input()
-  tableDataManager?: TableDataManager<any>;
+  @Input() rows?: T[];
 
   rowLength = signal(0);
   pageSizeOptions = signal([5, 10, 25, 100]);
@@ -71,6 +71,10 @@ export class TableComponent {
       this.columns = this.columnDefs.map(d => d.key);
       console.log('on change: ', changes);
     }
+    if(changes['rows']?.currentValue.length > 0) {
+      const rows = changes['rows'].currentValue;
+      this.setColumnDefs(rows[0].constructor as typeof AbstractRow);
+    }
   }
 
   onSortChange(event: Sort): void {
@@ -104,6 +108,13 @@ export class TableComponent {
     const rowData = rawrowData.slice(startIndex, endIndex);
     this.dataSource.data = rowData;
     console.log(event);
+  }
+
+  private setColumnDefs(rowConstructor: typeof AbstractRow): void {
+    this.columnDefs = Array.from(
+      rowConstructor.getColumnDefs(),
+      ([key, value]) => ({ key, value })
+    );
   }
 
   private updateDisplay(): void {
