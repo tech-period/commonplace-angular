@@ -4,6 +4,7 @@ import { MatSortModule, Sort, SortDirection } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { SampleRow } from '../../models/table/sample-row';
 import { AbstractRow } from '../../models/table/abstract-row';
+import { ColumnDef } from '../../models/table/column-def';
 
 @Component({
   selector: 'app-table',
@@ -23,7 +24,7 @@ export class TableComponent<T extends AbstractRow> {
   pageSizeOptions = signal([5, 10, 25, 100]);
   pageSize = signal(this.pageSizeOptions()[0]);
   columns: string[] = [];
-  columnDefs: { key: string, value: string }[] = [];
+  columnDefs: ColumnDef[] = [];
   dataSource = new MatTableDataSource<any>([]);
 
   constructor() {}
@@ -82,10 +83,7 @@ export class TableComponent<T extends AbstractRow> {
   }
 
   private setColumnDefs(rowConstructor: typeof AbstractRow): void {
-    this.columnDefs = Array.from(
-      rowConstructor.getColumnDefs(),
-      ([key, value]) => ({ key, value })
-    );
+    this.columnDefs = rowConstructor.getColumnDefs();
   }
 
   private compare(a: any, b: any, isAsc: boolean): number {

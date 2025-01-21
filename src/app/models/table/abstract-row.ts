@@ -1,6 +1,8 @@
+import { ColumnDef } from "./column-def";
+
 export abstract class AbstractRow {
 
-  static columnNames: Map<string, string>;
+  static columnDefs: ColumnDef[];
 
   id: string;
   createDateTime: Date;
@@ -21,9 +23,9 @@ export abstract class AbstractRow {
 
   /**
    * `@ColumnName`Decoratorで指定された列の定義を取得する
-   * @returns Map<string, string>
+   * @returns ColumnDef[]
    */
-  static getColumnDefs(): Map<string, string> {
-    return this.columnNames || new Map<string, string>();
+  static getColumnDefs(): ColumnDef[] {
+    return this.columnDefs ?? [];
   }
 }
