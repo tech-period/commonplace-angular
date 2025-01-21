@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { TableComponent } from '../../components/table/table.component';
-import { TableDataManager } from '../../models/table/table-data-manager';
 import { SampleRow } from '../../models/table/sample-row';
 
 @Component({

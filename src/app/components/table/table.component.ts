@@ -3,8 +3,6 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatSortModule, Sort, SortDirection } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { SampleRow } from '../../models/table/sample-row';
-import { getColumnDefs } from '../../decorators/table';
-import { TableDataManager } from '../../models/table/table-data-manager';
 import { AbstractRow } from '../../models/table/abstract-row';
 
 @Component({
@@ -24,68 +22,36 @@ export class TableComponent<T extends AbstractRow> {
   rowLength = signal(0);
   pageSizeOptions = signal([5, 10, 25, 100]);
   pageSize = signal(this.pageSizeOptions()[0]);
-  columns: string[] = [
-    'id',
-    'sample1',
-    'sample2',
-    'sample3',
-  ];
+  columns: string[] = [];
   columnDefs: { key: string, value: string }[] = [];
   dataSource = new MatTableDataSource<any>([]);
-  private rawData:any = [
-    { id: 1, sample1: 'A', sample2: 'B', sample3: 'C' },
-    { id: 2, sample1: 'D', sample2: 'E', sample3: 'F' },
-    { id: 3, sample1: 'G', sample2: 'H', sample3: 'I' },
-    { id: 4, sample1: 'J', sample2: 'K', sample3: 'L' },
-    { id: 5, sample1: 'M', sample2: 'N', sample3: 'O' },
-    { id: 6, sample1: 'P', sample2: 'Q', sample3: 'R' },
-    { id: 7, sample1: 'S', sample2: 'T', sample3: 'U' },
-    { id: 8, sample1: 'V', sample2: 'W', sample3: 'X' },
-    { id: 9, sample1: 'Y', sample2: 'Z', sample3: 'A' },
-    { id: 10, sample1: 'B', sample2: 'C', sample3: 'D' },
-    { id: 11, sample1: 'E', sample2: 'F', sample3: 'G' },
-  ];
 
-  constructor() {
-    // this.dataSource.data = this.rawData.map((data:any) => {
-    //   return new SampleRow(
-    //     data.id.toString(),
-    //     data.sample1,
-    //     data.sample2,
-    //     data.sample3,
-    //     new Date(),
-    //   );
-    // }).slice(0, this.pageSize());
-    this.rowLength.update(() => this.rawData.length);
-    // this.columnDefs = Array.from(
-    //   getColumnDefs(SampleRow),
-    //   ([key, value]) => ({ key, value })
-    // );
-  }
+  constructor() {}
   
   ngOnChanges(changes: SimpleChanges): void {
-    if(changes['tableDataManager']) {
-      const tableDataManager = changes['tableDataManager'];
-      this.dataSource.data = tableDataManager.currentValue.rows;
-      this.columnDefs = tableDataManager.currentValue.columnDefs;
-      this.columns = this.columnDefs.map(d => d.key);
-      console.log('on change: ', changes);
-    }
     if(changes['rows']?.currentValue.length > 0) {
       const rows = changes['rows'].currentValue;
+      this.dataSource.data = rows;
       this.setColumnDefs(rows[0].constructor as typeof AbstractRow);
+      this.columns = this.columnDefs.map(d => d.key);
+      this.rowLength.update(() => rows.length);
     }
   }
 
   onSortChange(event: Sort): void {
+    if(!this.rows) {
+      this.dataSource.data = [];
+      return;
+    };
+
     if (event.active && event.direction !== '') {
-      const sortedData = this.rawData.sort((a:any, b:any) => {
+      const sortedData = this.rows.sort((a:any, b:any) => {
         const isAsc: boolean = (event.direction === ('asc' as SortDirection));
         return this.compare(a[event.active], b[event.active], isAsc);
       });
       this.dataSource.data = sortedData.slice(0, this.pageSize());
     } else {
-      const sortedData = this.rawData.sort((a:any, b:any) => {
+      const sortedData = this.rows.sort((a:any, b:any) => {
         return this.compare(a.id, b.id, true);
       });
       this.dataSource.data = sortedData.slice(0, this.pageSize());
@@ -93,10 +59,15 @@ export class TableComponent<T extends AbstractRow> {
   }
 
   onPageChange(event: PageEvent): void {
+    if(!this.rows) {
+      this.dataSource.data = [];
+      return;
+    }
+
     this.pageSize.update(() => event.pageSize);
     const startIndex = event.pageIndex * event.pageSize;
     const endIndex = startIndex + event.pageSize;
-    const rawrowData = this.rawData.map((data:any) => {
+    const rawrowData = this.rows.map((data:any) => {
       return new SampleRow(
         data.id.toString(),
         data.sample1,
@@ -115,11 +86,6 @@ export class TableComponent<T extends AbstractRow> {
       rowConstructor.getColumnDefs(),
       ([key, value]) => ({ key, value })
     );
-  }
-
-  private updateDisplay(): void {
-    // ソートの指定に応じてソート
-    // ページングの指定に応じて対応するデータを取得
   }
 
   private compare(a: any, b: any, isAsc: boolean): number {
