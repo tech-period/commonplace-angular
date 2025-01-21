@@ -33,7 +33,7 @@ export class TableComponent<T extends AbstractRow> {
     if(changes['rows']?.currentValue.length > 0) {
       const rows = changes['rows'].currentValue;
       this.dataSource.data = rows;
-      this.setColumnDefs(rows[0].constructor as typeof AbstractRow);
+      this.columnDefs = rows[0].getColumnDefs();
       this.columns = this.columnDefs.map(d => d.key);
       this.rowLength.update(() => rows.length);
     }
@@ -80,10 +80,6 @@ export class TableComponent<T extends AbstractRow> {
     const rowData = rawrowData.slice(startIndex, endIndex);
     this.dataSource.data = rowData;
     console.log(event);
-  }
-
-  private setColumnDefs(rowConstructor: typeof AbstractRow): void {
-    this.columnDefs = rowConstructor.getColumnDefs();
   }
 
   private compare(a: any, b: any, isAsc: boolean): number {

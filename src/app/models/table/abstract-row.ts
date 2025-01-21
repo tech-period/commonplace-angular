@@ -25,7 +25,8 @@ export abstract class AbstractRow {
    * `@ColumnName`Decoratorで指定された列の定義を取得する
    * @returns ColumnDef[]
    */
-  static getColumnDefs(): ColumnDef[] {
-    return this.columnDefs ?? [];
+  getColumnDefs(): ColumnDef[] {
+    const constructor = this.constructor as typeof AbstractRow;
+    return constructor.columnDefs ?? [];
   }
 }
