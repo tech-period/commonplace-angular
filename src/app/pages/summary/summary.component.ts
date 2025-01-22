@@ -29,8 +29,9 @@ export class SummaryComponent {
   ];
 
   constructor() {
-    this.rows = this.rawData.map((data:any) => {
+    this.rows = this.rawData.map((data:any, index:number) => {
       return new SampleRow(
+        index,
         data.id.toString(),
         data.sample1,
         data.sample2,

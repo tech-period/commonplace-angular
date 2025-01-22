@@ -4,17 +4,20 @@ export abstract class AbstractRow {
 
   static columnDefs: ColumnDef[];
 
+  index: number;
   id: string;
   createDateTime: Date;
   updateDateTime: Date | null;
   deleteDateTime: Date | null;
 
   constructor(
+    index: number,
     id: string,
     createDateTime: Date,
     updateDateTime: Date | null = null,
     deleteDateTime: Date | null = null,
   ) {
+    this.index = index;
     this.id = id;
     this.createDateTime = createDateTime;
     this.updateDateTime = updateDateTime;

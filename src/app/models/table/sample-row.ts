@@ -13,6 +13,7 @@ export class SampleRow extends AbstractRow {
   sample3: string;
 
   constructor(
+    index: number,
     id: string,
     sample1: string,
     sample2: string,
@@ -21,7 +22,7 @@ export class SampleRow extends AbstractRow {
     updateDateTime: Date | null = null,
     deleteDateTime: Date | null = null,
   ) {
-    super(id, createDateTime, updateDateTime, deleteDateTime);
+    super(index, id, createDateTime, updateDateTime, deleteDateTime);
     this.id = id;
     this.sample1 = sample1;
     this.sample2 = sample2;
