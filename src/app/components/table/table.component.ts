@@ -26,7 +26,7 @@ export class TableComponent<T extends AbstractRow> {
   pageSize = signal(this.pageSizeOptions()[0]);
   columns: string[] = [];
   columnDefs: ColumnDef[] = [];
-  dataSource = new MatTableDataSource<any>([]);
+  dataSource = new MatTableDataSource<T>([]);
 
   isDisableSortHeader: boolean = true;
 
