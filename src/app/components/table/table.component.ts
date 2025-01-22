@@ -22,7 +22,7 @@ export class TableComponent<T extends AbstractRow> {
   @Input() rows?: T[];
 
   rowLength = signal(0);
-  pageSizeOptions = signal([5, 10, 25, 100]);
+  pageSizeOptions = signal([20, 50, 100]);
   pageSize = signal(this.pageSizeOptions()[0]);
   columns: string[] = [];
   columnDefs: ColumnDef[] = [];
@@ -37,7 +37,7 @@ export class TableComponent<T extends AbstractRow> {
 
     if(hasRows) {
       const rows = changes['rows'].currentValue;
-      this.dataSource.data = rows;
+      this.dataSource.data = rows.slice(0, this.pageSize());
       this.columnDefs = rows[0].getColumnDefs();
       this.columns = this.columnDefs.map(d => d.key);
       this.rowLength.update(() => rows.length);
