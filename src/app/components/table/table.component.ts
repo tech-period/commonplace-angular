@@ -36,24 +36,20 @@ export class TableComponent<T extends AbstractRow> {
       this.columns = this.columnDefs.map(d => d.key);
       this.rowLength.update(() => rows.length);
     }
+    this.resetSort();
   }
 
   onSortChange(event: Sort): void {
-    if(!this.rows) {
-      this.dataSource.data = [];
-      return;
-    };
+    if(!this.rows) return;
 
     if (event.active && event.direction !== '') {
       const sortedData = this.rows.sort((a:any, b:any) => {
         const isAsc: boolean = (event.direction === ('asc' as SortDirection));
-        return this.compare(a[event.active], b[event.active], isAsc);
+        return (a[event.active] < b[event.active] ? -1 : 1) * (isAsc ? 1 : -1);
       });
       this.dataSource.data = sortedData.slice(0, this.pageSize());
     } else {
-      const sortedData = this.rows.sort((a:any, b:any) => {
-        return this.compare(a.id, b.id, true);
-      });
+      const sortedData = this.rows.sort((a, b) => a.index < b.index ? -1 : 1);
       this.dataSource.data = sortedData.slice(0, this.pageSize());
     }
   }
@@ -64,6 +60,7 @@ export class TableComponent<T extends AbstractRow> {
     if(this.pageSize() != event.pageSize) {
       this.pageSize.update(() => event.pageSize);
       this.dataSource.data = this.rows.slice(0, event.pageSize);
+      this.resetSort();
     } else {
       const startIndex = event.pageIndex * event.pageSize;
       const endIndex = startIndex + event.pageSize;
@@ -72,7 +69,10 @@ export class TableComponent<T extends AbstractRow> {
     }
   }
 
-  private compare(a: any, b: any, isAsc: boolean): number {
-    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+  private resetSort(): void {
+    if(!this.sortSetting) return;
+    this.sortSetting.active = '';
+    this.sortSetting.direction = '';
+    this.sortSetting.sortChange.emit({ active: '', direction: '' });
   }
 }
