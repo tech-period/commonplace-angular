@@ -2,7 +2,6 @@ import { Component, Input, signal, SimpleChanges } from '@angular/core';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatSortModule, Sort, SortDirection } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { SampleRow } from '../../models/table/sample-row';
 import { AbstractRow } from '../../models/table/abstract-row';
 import { ColumnDef } from '../../models/table/column-def';
 
@@ -60,26 +59,17 @@ export class TableComponent<T extends AbstractRow> {
   }
 
   onPageChange(event: PageEvent): void {
-    if(!this.rows) {
-      this.dataSource.data = [];
-      return;
-    }
+    if(!this.rows) return;
 
-    this.pageSize.update(() => event.pageSize);
-    const startIndex = event.pageIndex * event.pageSize;
-    const endIndex = startIndex + event.pageSize;
-    const rawrowData = this.rows.map((data:any) => {
-      return new SampleRow(
-        data.id.toString(),
-        data.sample1,
-        data.sample2,
-        data.sample3,
-        new Date(),
-      );
-    });
-    const rowData = rawrowData.slice(startIndex, endIndex);
-    this.dataSource.data = rowData;
-    console.log(event);
+    if(this.pageSize() != event.pageSize) {
+      this.pageSize.update(() => event.pageSize);
+      this.dataSource.data = this.rows.slice(0, event.pageSize);
+    } else {
+      const startIndex = event.pageIndex * event.pageSize;
+      const endIndex = startIndex + event.pageSize;
+      const rowData = this.rows.slice(startIndex, endIndex);
+      this.dataSource.data = rowData;
+    }
   }
 
   private compare(a: any, b: any, isAsc: boolean): number {
