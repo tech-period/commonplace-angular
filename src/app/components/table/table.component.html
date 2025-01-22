@@ -24,6 +24,7 @@
     <mat-paginator
       [length]="rowLength()"
       [pageSizeOptions]="pageSizeOptions()"
+      [showFirstLastButtons]="true"
       (page)="onPageChange($event)"
     />
   </div>
