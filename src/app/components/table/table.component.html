@@ -4,7 +4,7 @@
     <table mat-table matSort [dataSource]="dataSource" (matSortChange)="onSortChange($event)">
       @for (def of columnDefs; track def) {
         <ng-container [matColumnDef]="def.key">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ def.value }}</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="isDisableSortHeader">{{ def.value }}</th>
           <td mat-cell *matCellDef="let row"> {{ row[def.key] }} </td>
         </ng-container>
       }

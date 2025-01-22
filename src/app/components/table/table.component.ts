@@ -1,6 +1,6 @@
-import { Component, Input, signal, SimpleChanges } from '@angular/core';
+import { Component, Input, signal, SimpleChanges, ViewChild } from '@angular/core';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
-import { MatSortModule, Sort, SortDirection } from '@angular/material/sort';
+import { MatSortModule, MatSort, Sort, SortDirection } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { AbstractRow } from '../../models/table/abstract-row';
 import { ColumnDef } from '../../models/table/column-def';
@@ -17,6 +17,8 @@ import { ColumnDef } from '../../models/table/column-def';
 })
 export class TableComponent<T extends AbstractRow> {
 
+  @ViewChild(MatSort) sortSetting: MatSort | undefined;
+
   @Input() rows?: T[];
 
   rowLength = signal(0);
@@ -26,16 +28,21 @@ export class TableComponent<T extends AbstractRow> {
   columnDefs: ColumnDef[] = [];
   dataSource = new MatTableDataSource<any>([]);
 
+  isDisableSortHeader: boolean = true;
+
   constructor() {}
   
   ngOnChanges(changes: SimpleChanges): void {
-    if(changes['rows']?.currentValue.length > 0) {
+    const hasRows = changes['rows']?.currentValue.length > 0;
+
+    if(hasRows) {
       const rows = changes['rows'].currentValue;
       this.dataSource.data = rows;
       this.columnDefs = rows[0].getColumnDefs();
       this.columns = this.columnDefs.map(d => d.key);
       this.rowLength.update(() => rows.length);
     }
+    this.isDisableSortHeader = !hasRows;
     this.resetSort();
   }
 
