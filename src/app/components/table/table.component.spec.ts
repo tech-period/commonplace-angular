@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { configureTestBed } from '../../app.config';
 import { TableComponent } from './table.component';
 import { AbstractRow } from '../../models/table/abstract-row';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -12,13 +13,14 @@ describe('TableComponent', () => {
   let fixture: ComponentFixture<TableComponent<TestRow>>;
 
   beforeEach(async () => {
+    configureTestBed();
     await TestBed.configureTestingModule({
       imports: [
         MatPaginatorModule,
         MatSortModule,
         MatTableModule,
         TableComponent,
-      ]
+      ],
     })
     .compileComponents();
 
