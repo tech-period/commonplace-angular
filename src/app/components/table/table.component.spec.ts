@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { Component, ViewChild } from '@angular/core';
 import { configureTestBed } from '../../app.config';
 import { TableComponent } from './table.component';
 import { AbstractRow } from '../../models/table/abstract-row';
@@ -9,9 +9,10 @@ import { MatTableModule } from '@angular/material/table';
 import { ColumnName } from '../../decorators/table';
 
 describe('TableComponent', () => {
-  let component: TableComponent<TestRow>;
-  let fixture: ComponentFixture<TableComponent<TestRow>>;
-
+  let hostComponent: TestHostComponent;
+  let testTargetComponent: TableComponent<TestRow>;
+  let fixture: ComponentFixture<TestHostComponent>;
+  
   beforeEach(async () => {
     configureTestBed();
     await TestBed.configureTestingModule({
@@ -20,19 +21,46 @@ describe('TableComponent', () => {
         MatSortModule,
         MatTableModule,
         TableComponent,
+        TestHostComponent,
       ],
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(TableComponent<TestRow>);
-    component = fixture.componentInstance;
+    fixture = TestBed.createComponent(TestHostComponent);
+    hostComponent = fixture.componentInstance;
     fixture.detectChanges();
+
+    testTargetComponent = hostComponent.testTargetComponent;
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(hostComponent).toBeTruthy();
+  });
+
+  it('should setup test data', () => {
+    const testRows = getTestData();
+    hostComponent.valueFromHost = testRows;
+    fixture.detectChanges();
+    expect(testTargetComponent.dataSource.data.length).toBe(3);
   });
 });
+
+function getTestData(): TestRow[] {
+  return [
+    new TestRow(1, 'A101', 3, 'test1', true, new Date(), 80, 'A', true, new Date(), new Date()),
+    new TestRow(2, 'A102', 2, 'test2', false, null, null, null, null, new Date(), new Date()),
+    new TestRow(3, 'A103', 1, 'test3', true, new Date(), 60, 'B', false, new Date(), new Date()),
+  ]
+}
+
+@Component({
+  template : `<app-table [rows]="valueFromHost"/>`,
+  imports : [TableComponent]
+})
+export class TestHostComponent {
+  @ViewChild(TableComponent) public testTargetComponent: any;
+  valueFromHost: TestRow[] = [];
+}
 
 class TestRow extends AbstractRow {
   @ColumnName('社員コード') employeeCode: number;
