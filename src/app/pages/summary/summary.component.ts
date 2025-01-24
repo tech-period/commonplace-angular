@@ -1,11 +1,14 @@
 import { Component } from '@angular/core';
+import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { TableComponent } from '../../components/table/table.component';
 import { SampleRow } from '../../models/table/sample-row';
+import { ErrorDialogComponent } from '../../components/error-dialog/error-dialog.component';
 
 @Component({
   selector: 'app-summary',
   imports: [
-    TableComponent
+    MatDialogModule,
+    TableComponent,
   ],
   templateUrl: './summary.component.html',
   styleUrl: './summary.component.scss'
@@ -28,7 +31,9 @@ export class SummaryComponent {
     { id: 11, sample1: 'E', sample2: 'F', sample3: 'G' },
   ];
 
-  constructor() {
+  constructor(
+    private dialog: MatDialog,
+  ) {
     this.rows = this.rawData.map((data:any, index:number) => {
       return new SampleRow(
         index,
@@ -38,6 +43,14 @@ export class SummaryComponent {
         data.sample3,
         new Date(),
       );
+    });
+
+    this.dialog.open(ErrorDialogComponent, {
+      width: '400px',
+      data: {
+        title: 'Error',
+        message: 'This is an error message.'
+      }
     });
   }
 }
