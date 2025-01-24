@@ -43,6 +43,17 @@ describe('TableComponent', () => {
     fixture.detectChanges();
     expect(testTargetComponent.dataSource.data.length).toBe(3);
   });
+
+  it('should sort by score', () => {
+    const testRows = getTestData();
+    hostComponent.valueFromHost = testRows;
+    testTargetComponent.onSortChange({ active: 'employeeCode', direction: 'asc' });
+    // ソート処理の後にデータソースが更新されるのを待つ
+    fixture.whenStable().then(() => {
+      fixture.detectChanges();  // UI更新の反映
+      expect(testTargetComponent.dataSource.data[0].score).toBeNull();
+    });
+  });
 });
 
 function getTestData(): TestRow[] {
