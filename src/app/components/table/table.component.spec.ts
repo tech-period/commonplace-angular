@@ -54,6 +54,27 @@ describe('TableComponent', () => {
       expect(testTargetComponent.dataSource.data[0].score).toBeNull();
     });
   });
+
+  it('should handle pagination correctly', () => {
+    const testRows = getTestDataForPagination();
+    hostComponent.valueFromHost = testRows;
+    fixture.detectChanges();
+  
+    // 初期状態の確認（デフォルトのページサイズは20）
+    expect(testTargetComponent.dataSource.data.length).toBe(20);
+    expect(testTargetComponent.dataSource.data[0].employeeCode).toBe(1); // 1ページ目の最初のデータ
+  
+    // 2ページ目に移動
+    testTargetComponent.onPageChange({
+      pageIndex: 1,
+      pageSize: 20,
+      length: testRows.length
+    });
+    fixture.detectChanges();
+  
+    // 2ページ目のデータを確認（インデックス20から始まるため、employeeCodeは21）
+    expect(testTargetComponent.dataSource.data[0].employeeCode).toBe(21);
+  });
 });
 
 function getTestData(): TestRow[] {
@@ -62,6 +83,30 @@ function getTestData(): TestRow[] {
     new TestRow(2, 'A102', 2, 'test2', false, null, null, null, null, new Date(), new Date()),
     new TestRow(3, 'A103', 1, 'test3', true, new Date(), 60, 'B', false, new Date(), new Date()),
   ]
+}
+
+// ページネーションテスト用のデータ生成関数
+function getTestDataForPagination(): TestRow[] {
+  const rows: TestRow[] = [];
+  // 100件のテストデータを生成
+  for (let i = 0; i < 100; i++) {  // 1から始めるのではなく0から始める
+    rows.push(
+      new TestRow(
+        i,                          // index
+        `A${(i + 1).toString().padStart(3, '0')}`, // id
+        i + 1,                     // employeeCode を1から始める
+        `test${i + 1}`,           // managerName
+        i % 2 === 0,              // isSubmitted
+        new Date(),               // submitDate
+        i % 100,                  // score
+        ['A', 'B', 'C', 'D'][i % 4], // rating
+        i % 3 === 0,              // isPassed
+        new Date(),               // deadline
+        new Date(),               // createdAt
+      )
+    );
+  }
+  return rows;
 }
 
 @Component({
