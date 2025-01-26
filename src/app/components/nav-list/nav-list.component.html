@@ -1,7 +1,10 @@
 <mat-nav-list>
-  @for (route of this.sampleList(); track route) {
+  @for (route of this.sampleList(); track route; let last = $last) {
     <mat-list-item>
       <a matListItemTitle (click)="navigateTo(route)">{{ route }}</a>
     </mat-list-item>
+    @if (!last) {
+      <mat-divider/>
+    }
   }
 </mat-nav-list>

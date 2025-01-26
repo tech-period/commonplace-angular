@@ -1,4 +1,5 @@
 import { Component, Signal, signal } from '@angular/core';
+import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
 import { routes } from '../../app.routes';
 import { RoutingService } from '../../services/routing.service';
@@ -6,6 +7,7 @@ import { RoutingService } from '../../services/routing.service';
 @Component({
   selector: 'app-nav-list',
   imports: [
+    MatDividerModule,
     MatListModule,
   ],
   templateUrl: './nav-list.component.html',
