@@ -29,6 +29,11 @@
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "glob": "mockServiceWorker.js",
+                "input": "node_modules/msw",
+                "output": "/"
               }
             ],
             "styles": [
