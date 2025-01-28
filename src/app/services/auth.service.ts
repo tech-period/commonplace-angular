@@ -20,6 +20,10 @@ export class AuthService {
     );
   }
 
+  get token(): string {
+    return '';
+  }
+
   async login(email: string, password: string): Promise<void> {
     try {
       await this.router.navigate(['/']);
