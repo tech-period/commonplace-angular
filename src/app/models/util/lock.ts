@@ -2,31 +2,30 @@
  * 複数同時に処理を実行させないように排他制御を行うクラス
  */
 export class Lock {
-  private promise: Promise<void> = Promise.resolve();
-  private resolve: (() => void) | null = null;
+  private locked = false;
+  private queue: (() => void)[] = [];
 
   /**
    * ロックを取得し、releaseメソッドが呼ばれるまで次の処理を待機する
    */
   async acquireAsync(): Promise<void> {
-    const next = new Promise<void>(resolve => {
-      this.resolve = resolve;
-    });
-    const prev = this.promise;
-    this.promise = next;
-    await prev;
+    if (this.locked) {
+      await new Promise<void>(resolve => this.queue.push(resolve));
+    }
+    this.locked = true;
     this.logWithStack('lock acquired');
   }
-
+  
   /**
    * ロックを解放する
-   */
+  */
   release(): void {
-    if (this.resolve) {
-      this.resolve();
-      this.resolve = null;
+    this.locked = false;
+    const next = this.queue.shift();
+    if (next) {
+      next();
     }
-    this.logWithStack('lock released');
+    this.logWithStack('lock acquired');
   }
 
   /**
