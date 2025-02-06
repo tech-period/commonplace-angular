@@ -39,4 +39,13 @@ export class AuthService {
       throw error;
     }
   }
+
+  /**
+   * @see https://developer.mozilla.org/ja/docs/Web/API/Web_Locks_API
+   */
+  private async updateTokenAsync(): Promise<void> {
+    await navigator.locks.request('update-token', async () => {
+      // Do something with the token
+    });
+  }
 }
