@@ -73,6 +73,7 @@ export class SelectComponent {
   }
 
   private calcSelectWidth(): string {
+    console.log('calcSelectWidth', this.selecter?.nativeElement.offsetWidth);
     return this.selecter?.nativeElement.offsetWidth + 'px';
   }
 }

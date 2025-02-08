@@ -51,8 +51,12 @@
     padding-right: 8px;
     gap: 4px;
     caret-color: transparent;
+    .error-message {
+      padding-top: 2px;
+    }
     .error-icon {
       color: crimson;
+      width: 3rem;
     }
   }
 }
