@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, EventEmitter, HostListener, Input, Output, signal, TemplateRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, signal, ViewChild } from '@angular/core';
 import { CdkMenuModule } from '@angular/cdk/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { ContextMenuComponent } from '../context-menu/context-menu.component';
@@ -18,14 +18,18 @@ import { ContextMenuComponent } from '../context-menu/context-menu.component';
 })
 export class SelectComponent {
   @Input() placeholder: string = 'placeholder';
-  @Input() errorMessage: string = 'error occurred';
+  @Input() errorMessage: string = '';
   @Input() width: string = '200px';
   @Input() disabled: boolean = false;
 
   @Output() select = new EventEmitter();
 
-  @ViewChild('selecter', { static: true }) selecter!: ElementRef;
+  @ViewChild('selecter') selecter!: ElementRef;
   menuWidth = signal<string>('');
+
+  private resizerObserver = new ResizeObserver(() =>
+    this.menuWidth.set(this.selecter?.nativeElement.offsetWidth + 'px')
+  );
 
   options = [
     { value: 'option1', label: 'Option 1' },
@@ -45,7 +49,11 @@ export class SelectComponent {
   isSelected = signal<boolean>(false);
 
   ngAfterViewInit(): void {
-    this.menuWidth.set(this.calcSelectWidth());
+    this.resizerObserver.observe(this.selecter.nativeElement);
+  }
+
+  ngOnDestroy(): void {
+    this.resizerObserver.disconnect();
   }
 
   onItemSelected(event: string): void {
@@ -63,17 +71,4 @@ export class SelectComponent {
     this.isOpened.set(false);
   }
 
-  /**
-   * 画面サイズ変更時、アイテム一覧の幅を再計算する
-   */
-  @HostListener('window:resize', ['$event'])
-  onResize(event: Event): void {
-    console.log('onResize', event);
-    this.menuWidth.set(this.calcSelectWidth());
-  }
-
-  private calcSelectWidth(): string {
-    console.log('calcSelectWidth', this.selecter?.nativeElement.offsetWidth);
-    return this.selecter?.nativeElement.offsetWidth + 'px';
-  }
 }
