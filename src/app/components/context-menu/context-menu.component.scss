@@ -1,0 +1,41 @@
+$hover-color: #EEEEEE;
+$active-overlay-color: #000;
+$shadow-color: #0003;
+$box-border-color: #AAAAAA;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 0;
+  border: 1px solid $box-border-color;
+  border-radius: 4px;
+  background-color: #FFF;
+  box-shadow: 0 2px 4px $shadow-color;
+  user-select: none;
+
+  .item {
+    display: flex;
+    padding: 4px 8px;
+    height: 24px;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    caret-color: transparent;
+    outline: none;
+
+    &:hover {
+      background-color: $hover-color;
+    }
+    &:active .item-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      // アクティブ時のカラーはホバーに重ねる形で表現
+      background-color: $active-overlay-color;
+      opacity: 0.3;
+    }
+  }
+}

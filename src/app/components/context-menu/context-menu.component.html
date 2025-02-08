@@ -1,0 +1,11 @@
+<ng-template #menu>
+  <div cdkMenu class="container" [style.width]="width">
+    @for(item of items; track $index) {
+      <span cdkMenuItem class="item" (click)="onClickItem(item, $event)">
+        {{ item }}
+        <!-- アクティブ時の上塗り用 -->
+        <div class="item-overlay"></div>
+      </span>
+    }
+  </div>
+</ng-template>
