@@ -1,0 +1,58 @@
+.container {
+  display: flex;
+  flex-direction: column;
+
+  .selecter {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 24px;
+    padding: 4px 0 4px 8px;
+    margin: 4px 8px;
+    border: 1px solid #8899AA;
+    border-radius: 4px;
+    cursor: pointer;
+    user-select: none;
+    &.disabled {
+      pointer-events: none;
+      background-color: #ECECEC;
+    }
+
+    .down-icon {
+      color: dimgrey;
+    }
+
+    // 未選択時のプレースホルダーの文字色
+    span.placeholder-text {
+      color: #999999;
+    }
+
+    /**
+      * メニュー展開時、展開の起点になる領域を無効化しておかないと、
+      * 領域外クリック→閉じる→展開起点のクリック→展開と処理され、
+      * コンテキストメニューが閉じない挙動が発生する
+      */
+    &.opened {
+      pointer-events: none;
+    }
+    // エラー状態のスタイル
+    &.error {
+      border-color: crimson;
+      background-color: lightpink;
+    }
+  }
+
+  // エラー状態時のエクスクラメーションアイコンのスタイル
+  .error-message-container {
+    display: flex;
+    font-size: 0.75rem;
+    color: crimson;
+    margin: 4px 8px;
+    padding-right: 8px;
+    gap: 4px;
+    caret-color: transparent;
+    .error-icon {
+      color: crimson;
+    }
+  }
+}

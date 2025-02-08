@@ -1,0 +1,29 @@
+<div class="container" [style.width]="width">
+  <div #selecter class="selecter" [ngClass]="{'opened': isOpened(), 'error': errorMessage}"
+    [class.disabled]="disabled"
+    [cdkMenuTriggerFor]="contextMenu.menu"
+    (cdkMenuOpened)="onMenuOpened()"
+    (cdkMenuClosed)="onMenuClosed()">
+    <span [ngClass]="{'placeholder-text': !isSelected()}">
+      {{ displayText()}}
+    </span>
+    <mat-icon
+      class="down-icon"
+      aria-hidden="false"
+      aria-label="icon"
+      fontIcon="expand_circle_down">
+    </mat-icon>
+  </div>
+  <app-context-menu #contextMenu [items]="items" [width]="menuWidth()" (select)="onItemSelected($event)" />
+  @if (errorMessage) {
+    <div class="error-message-container">
+      <mat-icon
+        class="error-icon"
+        aria-hidden="false"
+        aria-label="icon"
+        fontIcon="error">
+      </mat-icon>
+      <span class="error-message">{{ errorMessage }}</span>
+    </div> 
+  }
+</div>
