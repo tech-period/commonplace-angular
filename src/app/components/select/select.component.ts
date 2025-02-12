@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, EventEmitter, Input, Output, signal, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, model, Output, signal, ViewChild } from '@angular/core';
 import { CdkMenuModule } from '@angular/cdk/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { ContextMenuComponent } from '../context-menu/context-menu.component';
@@ -23,6 +23,9 @@ export class SelectComponent {
   @Input() disabled: boolean = false;
 
   @Output() select = new EventEmitter();
+
+  // 双方向バインドの新規API
+  selectedOption = model();
 
   @ViewChild('selecter') selecter!: ElementRef;
   menuWidth = signal<string>('');
