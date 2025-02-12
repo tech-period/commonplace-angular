@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, EventEmitter, Input, model, Output, signal, ViewChild } from '@angular/core';
+import { booleanAttribute, Component, ElementRef, EventEmitter, input, model, Output, signal, ViewChild } from '@angular/core';
 import { CdkMenuModule } from '@angular/cdk/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { ContextMenuComponent } from '../context-menu/context-menu.component';
@@ -17,10 +17,10 @@ import { ContextMenuComponent } from '../context-menu/context-menu.component';
   styleUrl: './select.component.scss'
 })
 export class SelectComponent {
-  @Input() placeholder: string = 'placeholder';
-  @Input() errorMessage: string = '';
-  @Input() width: string = '200px';
-  @Input() disabled: boolean = false;
+  placeholder = input<string>('placeholder');
+  errorMessage = input<string>('');
+  width = input<string>('200px');
+  disabled = input(false, { transform: booleanAttribute });
 
   @Output() select = new EventEmitter();
 
