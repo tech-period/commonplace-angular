@@ -9,9 +9,11 @@ export class IframeService implements OnDestroy {
 
   private _allowedOrigin: URL;
 
-  // 認可済みオリジンのみにフィルタリングしたメッセージイベント
-  messageEvent$: Observable<MessageEvent>;
   private _messageEventSub: Subscription;
+
+  // 認可済みオリジンのみにフィルタリングしたメッセージイベント
+  private _messageEvent$ = new Subject<MessageEvent>();
+  messageEvent$ = this._messageEvent$.asObservable();
 
   // 受け取った全てのメッセージイベント
   private _rawMessageEvent$ = new Subject<MessageEvent>();
@@ -20,21 +22,20 @@ export class IframeService implements OnDestroy {
   constructor() {
     // moduleのforRootでオリジンを受け取っていたらその値をセット
     const injectedUrl: string | null = inject(IFRAME_ALLOWED_ORIGIN, { optional: true});
-    this._allowedOrigin = injectedUrl ? new URL(injectedUrl) : new URL('*');
+    this._allowedOrigin = new URL(injectedUrl ? injectedUrl : '*');
 
     // 外部から参照できるように一旦プロパティにセット
-    this.messageEvent$ = fromEvent<MessageEvent>(window, 'message').pipe(
+    this._messageEventSub = fromEvent<MessageEvent>(window, 'message').pipe(
       // 全てのイベントを別のSubjectとして分岐
       tap((e:MessageEvent) => this._rawMessageEvent$.next(e)),
-      filter((e:MessageEvent) => e.origin === this._allowedOrigin.toString()),
-    );
-    
-    // すぐに購読開始
-    this._messageEventSub = this.messageEvent$.subscribe();
+      filter((e:MessageEvent) => new URL(e.origin).href === this._allowedOrigin.href),
+    ).subscribe(e => this._messageEvent$.next(e));    
   }
 
   ngOnDestroy(): void {
     // 購読破棄
+    this._rawMessageEvent$.complete();
+    this._messageEvent$.complete();
     this._messageEventSub.unsubscribe();
   }
 }
