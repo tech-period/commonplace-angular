@@ -6,9 +6,8 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-
 import { NavListComponent } from './components/nav-list/nav-list.component';
-import { ViewportService } from './services/viewport.service';
+import { ViewportService } from '@service/viewport.service';
 
 @Component({
   selector: 'app-root',
@@ -37,7 +36,6 @@ export class AppComponent {
     ]).pipe(
       map(([isSmall, isSidenavOpen]) => !isSmall || isSidenavOpen),
     );
-
   }
 
   onToggleSidenav(): void {

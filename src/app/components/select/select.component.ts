@@ -46,7 +46,7 @@ export class SelectComponent {
     'Item 3',
     'Item 4',
   ];
-  displayText = signal<string>(this.placeholder);
+  displayText = signal<string>(this.placeholder());
 
   isOpened = signal<boolean>(false);
   isSelected = signal<boolean>(false);
