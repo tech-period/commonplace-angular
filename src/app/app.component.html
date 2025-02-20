@@ -1,6 +1,6 @@
 <app-navbar (toggleSidenav)="onToggleSidenav()"/>
 <mat-sidenav-container>
-  <mat-sidenav mode="side" [opened]="isShowSidenav$ | async">
+  <mat-sidenav mode="side" [disableClose]="isShowSidenav$ | async" [opened]="isShowSidenav$ | async">
     <div class="sidenav-container">
       <app-nav-list/>
       <mat-divider [vertical]="true"/>
