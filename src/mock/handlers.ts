@@ -3,7 +3,7 @@ import { http, HttpResponse } from 'msw';
 export const handlers = [
   http.get('/api/example', () => {
     return HttpResponse.json({
-      message: 'モックレスポンス'
+      message: '[GET]モックレスポンス'
     });    
   }),
 
@@ -11,7 +11,7 @@ export const handlers = [
     const body = await request.json();
     if(Object.keys(body as object).length != 0) {
       return HttpResponse.json({
-        message: 'モックレスポンス',
+        message: '[POST]モックレスポンス',
       }, { status: 200 });
     } else {
       return HttpResponse.json({
